@@ -3,11 +3,9 @@
 基于多 Agent 编排与 RAG 的智能客服系统，支持订单咨询、
 技术支持、账单售后、多轮会话记忆及对话质量评测。
 
-- 在线演示：https://kimberly-wilson.github.io/ServicePilot/
 - Python 后端说明：[查看文档](ServicePilot/README.md)
 - 前端说明：[查看文档](ServicePilotFrontend/README.md)
 
-> GitHub Pages 托管前端页面。真实对话功能依赖单独部署的后端服务。
 
 ## 项目背景
 
@@ -32,8 +30,8 @@
 
 ```mermaid
 flowchart TD
-    U[用户浏览器] --> P[GitHub Pages / Vue 前端]
-    P --> API[独立部署的后端 API]
+    U[用户浏览器] --> P[Vue 前端]
+    P --> API[后端 API]
     API --> M[会话记忆]
     API --> I[意图识别]
     I --> O[Agent 编排]
@@ -67,7 +65,6 @@ ServicePilot/          Python 后端、Skills 与详细文档
 ServicePilotJava/      Java 后端
 ServicePilotFrontend/  Vue 前端
 docs/images/           项目截图
-.github/workflows/     GitHub Pages 部署流程
 ```
 
 ## 本地启动：Python 后端
@@ -95,11 +92,6 @@ npm run dev
 
 根据终端输出访问开发地址。默认通过 Vite 代理连接本地后端。
 
-## 在线部署
-
-前端由 GitHub Actions 构建并发布到 GitHub Pages。
-后端和存储服务单独部署，通过 HTTPS API 与前端通信。
-
 ## 评测说明
 
 项目提供 Accuracy、Macro-F1 和 LLM-as-Judge 评测能力。
@@ -110,4 +102,3 @@ npm run dev
 
 - 人工升级目前为状态标记和交接信息，尚未对接真实工单系统。
 - Python 工具管理层为进程内实现，不等同于完整 MCP 协议服务。
-- 公开演示环境需要对付费调用和管理接口设置访问控制。
