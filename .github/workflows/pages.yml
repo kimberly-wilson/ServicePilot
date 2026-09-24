@@ -1,0 +1,77 @@
+name: Deploy ServicePilot Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    defaults:
+      run:
+        working-directory: ServicePilotFrontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: ServicePilotFrontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate runtime configuration
+        env:
+          PYTHON_API_URL: ${{ vars.PYTHON_API_URL }}
+          JAVA_API_URL: ${{ vars.JAVA_API_URL }}
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+
+          const config = {
+            pythonApiUrl: process.env.PYTHON_API_URL || '/api/python',
+            javaApiUrl: process.env.JAVA_API_URL || '/api/java'
+          };
+
+          fs.writeFileSync(
+            'public/runtime-config.js',
+            `window.__ECHOMIND_CONFIG__ = ${JSON.stringify(config)};\n`
+          );
+          NODE
+
+      - name: Build frontend
+        env:
+          GITHUB_PAGES: 'true'
+        run: npm run build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ServicePilotFrontend/dist
+
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v5
