@@ -63,11 +63,11 @@ Java 版在控制器中按意图触发检索，并提供回答校验模块。
 ## 项目结构
 
 ```text
-EchoMind/          Python 后端、Skills 与详细文档
-EchoMindJava/      Java 后端
-EchoMindFrontend/  Vue 前端
-docs/images/      项目截图
-.github/workflows/ GitHub Pages 部署流程
+ServicePilot/          Python 后端、Skills 与详细文档
+ServicePilotJava/      Java 后端
+ServicePilotFrontend/  Vue 前端
+docs/images/           项目截图
+.github/workflows/     GitHub Pages 部署流程
 ```
 
 ## 本地启动：Python 后端
@@ -75,10 +75,10 @@ docs/images/      项目截图
 前置条件：Docker、Docker Compose、可用的模型 API 配置。
 
 ```bash
-cd EchoMind
+cd ServicePilot
 cp .env.example .env
 # 编辑 .env，填写模型服务配置
-docker compose up -d --build echomind
+docker compose up -d --build servicepilot
 ```
 
 - API：http://localhost:8000
@@ -88,7 +88,7 @@ docker compose up -d --build echomind
 ## 本地启动：前端
 
 ```bash
-cd EchoMindFrontend
+cd ServicePilotFrontend
 npm ci
 npm run dev
 ```
